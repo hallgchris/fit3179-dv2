@@ -5,8 +5,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: { unoptimized: true },
-  assetPrefix: "/fit3179-dv2/",
-  basePath: "/fit3179-dv2",
+  assetPrefix: isProd ? "/fit3179-dv2/" : undefined,
+  basePath: isProd ? "/fit3179-dv2" : undefined,
 };
 
 module.exports = nextConfig;
