@@ -81,8 +81,8 @@ const vis_spec: VisualizationSpec = {
 
 const Home: NextPage = () => {
   return (
-    <Container maxWidth="xl">
-      <h1>Week 9 homework</h1>
+    <Container maxWidth="lg">
+      <h1>FIT3179 week 9 homework</h1>
       <VegaLite spec={vis_spec} />
     </Container>
   );
