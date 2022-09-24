@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "yarn"
-        working-directory: ./vis-website
+          cache-dependency-path: ./vis-website
 
       - name: Build
         run: |
