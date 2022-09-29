@@ -33,7 +33,7 @@ const vis_spec: VisualizationSpec = {
         {
           lookup: "properties.POA_CODE21",
           from: {
-            data: { url: "postcodes_processed.csv" },
+            data: { url: "postcodes.csv" },
             key: "postcode",
             fields: ["locality"],
           },
