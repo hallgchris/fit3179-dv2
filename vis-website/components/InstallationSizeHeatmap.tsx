@@ -94,7 +94,7 @@ const heatmapSpec: UnitSpecWithFrame<Field> = {
     },
     y: capacityEncoding,
     color: {
-      field: "count",
+      field: "installations",
       type: "quantitative",
       legend: {
         title: "Monthly installations",
@@ -114,7 +114,7 @@ const heatmapSpec: UnitSpecWithFrame<Field> = {
       },
       { title: "Installation capacity (kW)", field: "size" },
       {
-        field: "count",
+        field: "installations",
         title: "Installations",
       },
     ],
@@ -129,7 +129,7 @@ const timeSeriesSpec: UnitSpecWithFrame<Field> = {
     x: { ...dateEncoding, axis: { ...dateEncoding.axis, title: null } },
     y: {
       aggregate: "sum",
-      field: "count",
+      field: "installations",
       title: "Monthly installations",
     },
     tooltip: [
@@ -143,7 +143,7 @@ const timeSeriesSpec: UnitSpecWithFrame<Field> = {
       },
       {
         title: "Installations",
-        field: "count",
+        field: "installations",
         aggregate: "sum",
         format: ",",
       },
@@ -158,7 +158,7 @@ const capacitySpec: UnitSpecWithFrame<Field> = {
   encoding: {
     x: {
       aggregate: "sum",
-      field: "count",
+      field: "installations",
       title: "Total installations",
     },
     y: {
@@ -175,7 +175,7 @@ const capacitySpec: UnitSpecWithFrame<Field> = {
       { title: "Installation capacity (kW)", field: "size" },
       {
         title: "Installations",
-        field: "count",
+        field: "installations",
         aggregate: "sum",
         format: ",",
       },
@@ -189,10 +189,10 @@ const visSpec: VisualizationSpec = {
     text: "Solar installation capacity over time",
     fontSize: 24,
   },
-  data: { url: "installation_sizes.csv" },
+  data: { url: "installations_time_series.csv" },
   transform: [
     {
-      filter: "datum.count > 0",
+      filter: "datum.installations > 0",
     },
     {
       calculate: "datetime(datum.year, datum.month - 1)",
