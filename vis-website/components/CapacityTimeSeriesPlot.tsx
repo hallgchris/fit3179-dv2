@@ -1,20 +1,31 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
+import { dateEncoding } from "./common";
 
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Todo",
+    text: "Solar capacity by installation size and state",
     fontSize: 24,
   },
   width: 1200,
-  height: 400,
+  height: 500,
   params: [
     {
       name: "state_select",
       bind: {
         input: "select",
-        name: "State/Territory",
+        name: "State/Territory: ",
         options: ["aus", "nsw+act", "nt", "qld", "sa", "tas", "vic", "wa"],
+        labels: [
+          "Australia",
+          "New South Wales + Australian Capital Territory",
+          "Northern Territory",
+          "Queensland",
+          "South Australia",
+          "Tasmania",
+          "Victoria",
+          "Western Australia",
+        ],
       },
       value: "aus",
     },
@@ -22,7 +33,7 @@ const visSpec: VisualizationSpec = {
       name: "cumulative",
       bind: {
         input: "checkbox",
-        name: "Cumulative",
+        name: "Cumulative: ",
       },
     },
   ],
@@ -76,22 +87,32 @@ const visSpec: VisualizationSpec = {
       calculate: "cumulative ? datum.cumulativeCapacity : datum.capacity",
       as: "chosenCapacity",
     },
+
+    {
+      joinaggregate: [
+        {
+          op: "sum",
+          field: "chosenCapacity",
+          as: "totalCapacity",
+        },
+      ],
+      groupby: ["date", "state"],
+    },
   ],
   mark: "area",
   encoding: {
-    x: {
-      field: "date",
-      timeUnit: "yearmonth",
-    },
+    x: dateEncoding,
     y: {
       field: "chosenCapacity",
       type: "quantitative",
+      title: "Installed capacity (MW)",
     },
     color: {
       field: "sizeLabel",
       type: "ordinal",
       legend: {
-        title: "Solar plant size",
+        title: "Solar plant capacity",
+        labelFontSize: 12,
       },
       scale: {
         domain: [
@@ -110,7 +131,30 @@ const visSpec: VisualizationSpec = {
       },
     },
     order: { field: "size", type: "quantitative" },
-    tooltip: [{ field: "size" }, { field: "sizeLabel" }],
+    tooltip: [
+      {
+        field: "year",
+        title: "Year",
+      },
+      {
+        title: "Date",
+        field: "monthFormatted",
+      },
+      {
+        title: "Plant capacity",
+        field: "sizeLabel",
+      },
+      {
+        title: "Installed capacity (MW)",
+        field: "chosenCapacity",
+        format: ",",
+      },
+      {
+        title: "Installed capacity, all plant sizes (MW)",
+        field: "totalCapacity",
+        format: ",",
+      },
+    ],
   },
 };
 

@@ -72,7 +72,7 @@ for state, df in zip(states, input_dfs):
                         "size": csvSizes.index(size)
                         if csvSizes.index(size) < 10
                         else "a",
-                        "capacity": int(row[size]),
+                        "capacity": int(row[size] / 1000),
                     }
                     for (_, row), size in itertools.product(df.iterrows(), csvSizes)
                 ]
