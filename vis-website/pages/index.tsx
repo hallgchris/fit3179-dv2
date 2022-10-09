@@ -8,9 +8,7 @@ import InstallationSizeHeatmap from "../components/InstallationSizeHeatmap";
 const Home: NextPage = () => {
   return (
     <div>
-      Hello world!
       <br />
-      <Link href="/week9hw">Week 9 homework</Link>
       <CapacityTimeSeriesPlot />
       <InstallationSizeHeatmap />
       <CumulativeCapacityPlot />

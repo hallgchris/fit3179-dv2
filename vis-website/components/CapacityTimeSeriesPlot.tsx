@@ -8,10 +8,28 @@ const visSpec: VisualizationSpec = {
   },
   width: 1200,
   height: 400,
+  params: [
+    {
+      name: "state_select",
+      bind: {
+        input: "select",
+        name: "State/Territory",
+        options: ["aus", "nsw+act", "nt", "qld", "sa", "tas", "vic", "wa"],
+      },
+      value: "aus",
+    },
+    {
+      name: "cumulative",
+      bind: {
+        input: "checkbox",
+        name: "Cumulative",
+      },
+    },
+  ],
   data: { url: "state_time_series.csv" },
   transform: [
     {
-      filter: { field: "state", equal: "aus" },
+      filter: "datum.state == state_select",
     },
     {
       calculate: "datetime(datum.year, datum.month - 1)",
@@ -44,6 +62,20 @@ const visSpec: VisualizationSpec = {
       },
       as: "sizeLabel",
     },
+    {
+      window: [
+        {
+          op: "sum",
+          field: "capacity",
+          as: "cumulativeCapacity",
+        },
+      ],
+      groupby: ["size"],
+    },
+    {
+      calculate: "cumulative ? datum.cumulativeCapacity : datum.capacity",
+      as: "chosenCapacity",
+    },
   ],
   mark: "area",
   encoding: {
@@ -52,7 +84,7 @@ const visSpec: VisualizationSpec = {
       timeUnit: "yearmonth",
     },
     y: {
-      field: "capacity",
+      field: "chosenCapacity",
       type: "quantitative",
     },
     color: {
