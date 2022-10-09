@@ -143,7 +143,7 @@ const visSpec: VisualizationSpec = {
         field: "sizeLabel",
       },
       {
-        title: "Installed capacity (MW)",
+        title: "Installed capacity, this plant size (MW)",
         field: "chosenCapacity",
         format: ",",
       },
