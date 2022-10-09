@@ -1,10 +1,19 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
 import { dateEncoding } from "./common";
 
+const capacities = [
+  "Less than 4.5 kW",
+  "4.5 to 9.5 kW",
+  "9.5 to 25 kW",
+  "25 to 100 kW",
+  "100 kW to 30 MW",
+  "More than 30 MW",
+];
+
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Solar capacity by installation size and state",
+    text: "Total solar capacity by installation size and state",
     fontSize: 24,
   },
   width: 1200,
@@ -35,6 +44,11 @@ const visSpec: VisualizationSpec = {
         input: "checkbox",
         name: "Cumulative: ",
       },
+      value: true,
+    },
+    {
+      name: "highlight",
+      select: { type: "point", on: "mouseover" },
     },
   ],
   data: { url: "state_time_series.csv" },
@@ -55,19 +69,7 @@ const visSpec: VisualizationSpec = {
       from: {
         key: "size",
         data: {
-          values: [
-            { size: 0, label: "Less than 2.5 kW" },
-            { size: 1, label: "2.5 to 4.5 kW" },
-            { size: 2, label: "4.5 to 6.5 kW" },
-            { size: 3, label: "6.5 to 9.5 kW" },
-            { size: 4, label: "9.5 to 14 kW" },
-            { size: 5, label: "14 to 25 kW" },
-            { size: 6, label: "25 to 50 kW" },
-            { size: 7, label: "50 to 100 kW" },
-            { size: 8, label: "100 kW to 5 MW" },
-            { size: 9, label: "5 MW to 30 MW" },
-            { size: "a", label: "More than 30 MW" },
-          ],
+          values: capacities.map((size, i) => ({ size: i, label: size })),
         },
         fields: ["label"],
       },
@@ -105,7 +107,7 @@ const visSpec: VisualizationSpec = {
     y: {
       field: "chosenCapacity",
       type: "quantitative",
-      title: "Installed capacity (MW)",
+      title: "Total installed capacity (MW)",
     },
     color: {
       field: "sizeLabel",
@@ -113,22 +115,18 @@ const visSpec: VisualizationSpec = {
       legend: {
         title: "Solar plant capacity",
         labelFontSize: 12,
+        orient: "top-left",
       },
       scale: {
-        domain: [
-          "Less than 2.5 kW",
-          "2.5 to 4.5 kW",
-          "4.5 to 6.5 kW",
-          "6.5 to 9.5 kW",
-          "9.5 to 14 kW",
-          "14 to 25 kW",
-          "25 to 50 kW",
-          "50 to 100 kW",
-          "100 kW to 5 MW",
-          "5 MW to 30 MW",
-          "More than 30 MW",
-        ],
+        domain: capacities,
       },
+    },
+    opacity: {
+      condition: {
+        param: "highlight",
+        value: 1,
+      },
+      value: 0.5,
     },
     order: { field: "size", type: "quantitative" },
     tooltip: [
