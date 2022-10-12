@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       <HouseholdInstallationMap />
       <h2>The size of solar installations has increased over time</h2>
       <InstallationSizeHeatmap />
-      <h2>Blah</h2>
+      <h2>The size of solar plants varies between states</h2>
       <StateSizeChart />
       <h2>Australia is increasingly a solar-powered country</h2>
       <CumulativeCapacityPlot />

@@ -9,22 +9,47 @@ const visSpec: VisualizationSpec = {
   },
   width: 1200,
   height: 600,
-  data: { url: "state_time_series_notimes.csv" },
+  data: { url: "state_time_series.csv" },
+  params: [
+    {
+      name: "time_slider",
+      value: 2022,
+      bind: {
+        name: "Date",
+        input: "range",
+        min: 2010,
+        max: 2022,
+        step: 1,
+      },
+    },
+  ],
   transform: [
+    {
+      window: [
+        {
+          op: "sum",
+          field: "capacity",
+          as: "cumulativeCapacity",
+        },
+      ],
+      groupby: ["state", "size"],
+    },
+    { filter: "datum.year == time_slider" },
+    { filter: "datum.month == 1" },
     stateLabelLookup,
     sizeLabelLookup,
     {
       joinaggregate: [
         {
           op: "sum",
-          field: "capacity",
+          field: "cumulativeCapacity",
           as: "totalStateCapacity",
         },
       ],
       groupby: ["state"],
     },
     {
-      calculate: "datum.capacity / datum.totalStateCapacity",
+      calculate: "datum.cumulativeCapacity / datum.totalStateCapacity",
       as: "normalisedCapacity",
     },
   ],
@@ -40,7 +65,10 @@ const visSpec: VisualizationSpec = {
       field: "normalisedCapacity",
       type: "quantitative",
       title: "% of total state solar generation",
-      axis: { labelExpr: "round(datum.value * 100) + '%'" },
+      axis: {
+        labelExpr: "round(datum.value * 100) + '%'",
+      },
+      scale: { domain: [0, 1] },
     },
     order: {
       field: "size",
