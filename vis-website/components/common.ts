@@ -1,4 +1,6 @@
-import { PositionFieldDef } from "vega-lite/build/src/channeldef";
+import { Text } from "vega";
+import { Field, PositionFieldDef } from "vega-lite/build/src/channeldef";
+import { UnitSpec } from "vega-lite/build/src/spec";
 
 export const dateEncoding: PositionFieldDef<"date"> = {
   field: "date",
@@ -40,3 +42,34 @@ export const dateEncoding: PositionFieldDef<"date"> = {
     },
   },
 };
+
+export const makeTimeSeriesAnnotation = (
+  date: string,
+  yValue: number,
+  text: Text,
+  showCondition: string = "true"
+): UnitSpec<Field> => ({
+  data: [{}],
+  encoding: {
+    x: {
+      datum: Number(new Date(date)),
+      type: "ordinal",
+    },
+    y: {
+      datum: yValue,
+    },
+    opacity: {
+      condition: {
+        test: showCondition,
+        value: 1,
+      },
+      value: 0,
+    },
+  },
+  mark: {
+    type: "text",
+    align: "left",
+    baseline: "bottom",
+    text,
+  },
+});
