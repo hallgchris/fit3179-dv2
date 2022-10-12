@@ -1,14 +1,11 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
-import { dateEncoding, makeTimeSeriesAnnotation } from "./common";
-
-const capacities = [
-  "Less than 4.5 kW",
-  "4.5 to 9.5 kW",
-  "9.5 to 25 kW",
-  "25 to 100 kW",
-  "100 kW to 30 MW",
-  "More than 30 MW",
-];
+import {
+  sizeLabels,
+  dateEncoding,
+  makeTimeSeriesAnnotation,
+  sizeLabelLookup,
+  stateLabels,
+} from "./common";
 
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
@@ -25,16 +22,7 @@ const visSpec: VisualizationSpec = {
         input: "select",
         name: "State/Territory: ",
         options: ["aus", "nsw+act", "nt", "qld", "sa", "tas", "vic", "wa"],
-        labels: [
-          "Australia",
-          "New South Wales + Australian Capital Territory",
-          "Northern Territory",
-          "Queensland",
-          "South Australia",
-          "Tasmania",
-          "Victoria",
-          "Western Australia",
-        ],
+        labels: stateLabels,
       },
       value: "aus",
     },
@@ -68,17 +56,7 @@ const visSpec: VisualizationSpec = {
           calculate: "monthFormat(datum.month - 1)",
           as: "monthFormatted",
         },
-        {
-          lookup: "size",
-          from: {
-            key: "size",
-            data: {
-              values: capacities.map((size, i) => ({ size: i, label: size })),
-            },
-            fields: ["label"],
-          },
-          as: "sizeLabel",
-        },
+        sizeLabelLookup,
         {
           window: [
             {
@@ -121,7 +99,7 @@ const visSpec: VisualizationSpec = {
             orient: "top-left",
           },
           scale: {
-            domain: capacities,
+            domain: sizeLabels,
           },
         },
         opacity: {

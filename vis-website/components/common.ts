@@ -73,3 +73,49 @@ export const makeTimeSeriesAnnotation = (
     text,
   },
 });
+
+export const stateLabels = [
+  "Australia",
+  "New South Wales + ACT",
+  "Northern Territory",
+  "Queensland",
+  "South Australia",
+  "Tasmania",
+  "Victoria",
+  "Western Australia",
+];
+
+const csvStates = ["aus", "nsw+act", "nt", "qld", "sa", "tas", "vic", "wa"];
+
+export const stateLabelLookup = {
+  lookup: "state",
+  from: {
+    key: "state",
+    data: {
+      values: csvStates.map((state, i) => ({ state, label: stateLabels[i] })),
+    },
+    fields: ["label"],
+  },
+  as: "stateLabel",
+};
+
+export const sizeLabels = [
+  "Less than 4.5 kW",
+  "4.5 to 9.5 kW",
+  "9.5 to 25 kW",
+  "25 to 100 kW",
+  "100 kW to 30 MW",
+  "More than 30 MW",
+];
+
+export const sizeLabelLookup = {
+  lookup: "size",
+  from: {
+    key: "size",
+    data: {
+      values: sizeLabels.map((size, i) => ({ size: i, label: size })),
+    },
+    fields: ["label"],
+  },
+  as: "sizeLabel",
+};

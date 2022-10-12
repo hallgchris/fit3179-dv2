@@ -1,18 +1,23 @@
+import { Container } from "@mui/material";
 import type { NextPage } from "next";
-import Link from "next/link";
-import CapacityTimeSeriesPlot from "../components/CapacityTimeSeriesPlot";
 import CumulativeCapacityPlot from "../components/CumulativeCapacityPlot";
-import InstallationDateHeatmap from "../components/InstallationDateHeatmap";
+import HouseholdInstallationMap from "../components/HouseholdInstallationMap";
 import InstallationSizeHeatmap from "../components/InstallationSizeHeatmap";
+import StateSizeChart from "../components/StateSizeChart";
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <br />
-      <CapacityTimeSeriesPlot />
+    <Container maxWidth="xl">
+      <h1>Solar in Australia</h1>
+      <h2>Residential solar usage depends on location</h2>
+      <HouseholdInstallationMap />
+      <h2>The size of solar installations has increased over time</h2>
       <InstallationSizeHeatmap />
+      <h2>Blah</h2>
+      <StateSizeChart />
+      <h2>Australia is increasingly a solar-powered country</h2>
       <CumulativeCapacityPlot />
-    </div>
+    </Container>
   );
 };
 

@@ -78,7 +78,8 @@ const heatmapSpec: LayerSpec<Field> = {
           legend: {
             title: "Monthly installations",
             offset: -250,
-            labelFontSize: 12,
+            titleFontSize: 16,
+            labelFontSize: 14,
           },
           scale: { scheme: "oranges", type: "log" },
         },
@@ -209,27 +210,6 @@ const visSpec: VisualizationSpec = {
     {
       calculate: "monthFormat(datum.month - 1)",
       as: "monthFormatted",
-    },
-    {
-      lookup: "size",
-      from: {
-        data: {
-          values: [
-            { sizeMin: 0, sizeLabel: "Less than 2.5 kW" },
-            { sizeMin: 2.5, sizeLabel: "2.5 to 4.5 kW" },
-            { sizeMin: 4.5, sizeLabel: "4.5 to 6.5 kW" },
-            { sizeMin: 6.5, sizeLabel: "6.5 to 9.5 kW" },
-            { sizeMin: 9.5, sizeLabel: "9.5 to 14 kW" },
-            { sizeMin: 14, sizeLabel: "14 to 25 kW" },
-            { sizeMin: 25, sizeLabel: "25 to 100 kW" },
-            { sizeMin: 100, sizeLabel: "100 kW to 5 MW" },
-            { sizeMin: 5000, sizeLabel: "5 MW to 30 MW" },
-            { sizeMin: 30000, sizeLabel: "More than 30 MW" },
-          ],
-        },
-        key: "sizeLabel",
-        fields: ["sizeMin"],
-      },
     },
   ],
   spacing: 5,
