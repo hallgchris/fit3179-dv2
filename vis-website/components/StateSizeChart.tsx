@@ -8,7 +8,7 @@ const visSpec: VisualizationSpec = {
     fontSize: 24,
   },
   width: 1200,
-  height: 600,
+  height: 400,
   data: { url: "state_time_series.csv" },
   params: [
     {

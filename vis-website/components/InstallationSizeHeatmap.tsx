@@ -8,8 +8,15 @@ const capacityEncoding: PositionFieldDef<"size"> = {
   field: "size",
   title: "Installation capacity (kW)",
   type: "ordinal",
-  // @ts-ignore - this seems to work fine for vega-lite...
-  sort: { field: "sizeMin" },
+  sort: [
+    "Less than 2.5 kW",
+    "2.5 to 4.5 kW",
+    "4.5 to 6.5 kW",
+    "6.5 to 9.5 kW",
+    "9.5 to 14 kW",
+    "14 to 25 kW",
+    "25 to 100 kW",
+  ],
   scale: { reverse: true },
 };
 
