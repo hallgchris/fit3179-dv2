@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           More and more houses in Australia are choosing to install solar
-          panels. However, we're not close to reaching the peak rates of
+          panels. However, we&apos;re not close to reaching the peak rates of
           installations seen in 2011/2012.
           <br />
           <br />
@@ -64,8 +64,8 @@ const Home: NextPage = () => {
           aiming to complete a project at the end of a year is convenient.
           <br />
           <br />
-          With both increasing quantity and size of installations, it's clear
-          that solar in Australia is on a strong upward trajectory.
+          With both increasing quantity and size of installations, it&apos;s
+          clear that solar in Australia is on a strong upward trajectory.
         </Grid>
         <Grid item xs={12}>
           <InstallationSizeHeatmap />
