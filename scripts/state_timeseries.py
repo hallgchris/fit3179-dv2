@@ -62,13 +62,29 @@ def getBinnedCapacity(row, outputSize):
         return row["30+ MW"]
 
 
-input_dfs = [
+aus_df = pd.read_csv("data/monthly_analysis_data_c3e0.csv")
+aus_df["capacity_monthly"] = aus_df["cumulative_installed_kw"].diff()
+state_dfs = [
     pd.read_csv(f"data/state_timeseries/{state}.csv", quotechar="'") for state in states
 ]
 
 output_df = pd.DataFrame(columns=["year", "month", "state", "size", "capacity"])
+output_nosizes_df = pd.DataFrame(columns=["year", "month", "state", "capacity"])
+output_notimes_df = pd.DataFrame(columns=["state", "size", "capacity"])
 
-for state, df in zip(states, input_dfs):
+output_nosizes_df = pd.DataFrame.from_records(
+    [
+        {
+            "year": int(row["year-month"][:4]),
+            "month": int(row["year-month"][5:]),
+            "state": "aus",
+            "capacity": row["capacity_monthly"],
+        }
+        for (_, row) in aus_df.iterrows()
+    ]
+)
+
+for state, df in zip(states, state_dfs):
     output_df = pd.concat(
         [
             output_df,
@@ -86,5 +102,30 @@ for state, df in zip(states, input_dfs):
             ),
         ]
     )
+    if state == "aus":
+        continue
+    output_nosizes_df = pd.concat(
+        [
+            output_nosizes_df,
+            pd.DataFrame.from_records(
+                [
+                    {
+                        "year": int(row["Month"][:4]),
+                        "month": int(row["Month"][5:]),
+                        "state": state,
+                        "capacity": sum(row[size] for size in csvSizes),
+                    }
+                    for (_, row) in df.iterrows()
+                ]
+            ),
+        ]
+    )
 
 output_df.to_csv("vis-website/public/state_time_series.csv", index=False)
+output_nosizes_df.to_csv(
+    "vis-website/public/state_time_series_nosizes.csv", index=False
+)
+
+output_notimes_df = output_df.groupby(["state", "size"]).sum()
+output_notimes_df.drop("year", axis=1, inplace=True)
+output_notimes_df.to_csv("vis-website/public/state_time_series_notimes.csv", index=True)

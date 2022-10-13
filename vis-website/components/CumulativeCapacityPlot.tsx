@@ -1,77 +1,65 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
-import { PositionFieldDef } from "vega-lite/build/src/channeldef";
-
-const dateEncoding: PositionFieldDef<"date"> = {
-  field: "date",
-  timeUnit: "yearmonthdate",
-  title: "Year",
-  type: "ordinal",
-  // Show only year tick labels
-  axis: {
-    format: "%Y",
-    labelAngle: 0,
-    labelOverlap: false,
-    labelColor: {
-      condition: {
-        test: {
-          timeUnit: "monthdate",
-          field: "value",
-          equal: { month: 1, date: 1 },
-        },
-        value: "black",
-      },
-      value: null,
-    },
-    // Show ticks every 3 months
-    tickColor: {
-      condition: {
-        test: {
-          timeUnit: "monthdate",
-          field: "value",
-          oneOf: [
-            { month: 1, date: 1 },
-            { month: 4, date: 1 },
-            { month: 7, date: 1 },
-            { month: 10, date: 1 },
-          ],
-        },
-        value: "black",
-      },
-      value: null,
-    },
-  },
-};
+import { title } from "vega-lite/build/src/channeldef";
+import { dateEncoding, stateLabelLookup } from "./common";
 
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Todo",
+    text: "Total Australian installed solar capacity",
     fontSize: 24,
   },
   width: 1200,
-  height: 400,
-  data: { url: "monthly_analysis_data_c3e0.csv" },
+  height: 600,
+  data: { url: "state_time_series_nosizes.csv" },
   transform: [
-    // {
-    //   calculate: "datetime(datum.year, datum.month - 1)",
-    //   as: "date",
-    // },
-    // {
-    //   calculate: "monthFormat(datum.month - 1)",
-    //   as: "monthFormatted",
-    // },
+    { filter: "datum.capacity > 0" },
+    {
+      calculate: "datetime(datum.year, datum.month - 1)",
+      as: "date",
+    },
+    {
+      calculate: "monthFormat(datum.month - 1)",
+      as: "monthFormatted",
+    },
+    {
+      window: [
+        {
+          op: "sum",
+          field: "capacity",
+          as: "cumulativeCapacity",
+        },
+      ],
+      groupby: ["state"],
+    },
+    stateLabelLookup,
   ],
-  mark: "line",
+  mark: {
+    type: "line",
+    strokeWidth: 3,
+    clip: true,
+  },
   encoding: {
-    x: {
-      field: "year-month",
-      timeUnit: "yearmonth",
-    },
+    x: dateEncoding,
     y: {
-      field: "cumulative_installed_kw",
+      field: "cumulativeCapacity",
       type: "quantitative",
-      scale: { type: "log" },
+      scale: { type: "log", domain: [100, 1e8] },
+      title: "Total installed capacity (kW)",
     },
+    color: {
+      field: "stateLabel",
+      legend: {
+        title: "State",
+        titleFontSize: 16,
+        labelFontSize: 14,
+        symbolStrokeWidth: 3,
+      },
+    },
+    tooltip: [
+      { title: "State", field: "stateLabel" },
+      { title: "Date", field: "date", type: "temporal" },
+      { title: "Capacity (kW)", field: "cumulativeCapacity", format: "," },
+    ],
   },
 };
 

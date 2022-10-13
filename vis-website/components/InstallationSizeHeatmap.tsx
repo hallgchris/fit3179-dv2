@@ -1,105 +1,170 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
 import { Field, PositionFieldDef } from "vega-lite/build/src/channeldef";
-import { UnitSpecWithFrame } from "vega-lite/build/src/spec/unit";
-import { dateEncoding } from "./common";
+import { LayerSpec } from "vega-lite/build/src/spec";
+import { UnitSpec, UnitSpecWithFrame } from "vega-lite/build/src/spec/unit";
+import { dateEncoding, makeTimeSeriesAnnotation } from "./common";
 
 const capacityEncoding: PositionFieldDef<"size"> = {
   field: "size",
   title: "Installation capacity (kW)",
   type: "ordinal",
-  // @ts-ignore - this seems to work fine for vega-lite...
-  sort: { field: "sizeMin" },
+  sort: [
+    "Less than 2.5 kW",
+    "2.5 to 4.5 kW",
+    "4.5 to 6.5 kW",
+    "6.5 to 9.5 kW",
+    "9.5 to 14 kW",
+    "14 to 25 kW",
+    "25 to 100 kW",
+  ],
   scale: { reverse: true },
 };
 
-const heatmapSpec: UnitSpecWithFrame<Field> = {
-  width: 1200,
-  height: 400,
+const makeHeatmapAnnotation = (
+  date: string,
+  capacity: string,
+  text: string
+): UnitSpec<Field> => ({
+  data: { values: [{}] },
   mark: {
-    type: "rect",
-    // Move marks so that the year lines pass between them not through them
-    xOffset: 5,
-    clip: true,
+    type: "text",
+    align: "left",
+    color: "black",
+    size: 14,
+    text,
   },
   encoding: {
     x: {
-      ...dateEncoding,
-      axis: {
-        ...dateEncoding.axis,
-        grid: true,
-        gridOpacity: {
-          condition: {
-            test: {
-              timeUnit: "monthdate",
-              field: "value",
-              equal: { month: 1, date: 1 },
-            },
-            value: 1,
-          },
-          value: 0,
-        },
-        gridWidth: 1,
-        // Dashed grid so that changes in colour over year boundaries are clearer
-        gridDash: [3, 10],
-      },
+      datum: Number(new Date(date)),
+      type: "ordinal",
     },
-    y: capacityEncoding,
-    color: {
-      field: "installations",
-      type: "quantitative",
-      legend: {
-        title: "Monthly installations",
-        offset: -250,
-        labelFontSize: 12,
-      },
-      scale: { scheme: "oranges", type: "log" },
+    y: {
+      datum: capacity,
+      type: "ordinal",
     },
-    tooltip: [
-      {
-        field: "year",
-        title: "Year",
-      },
-      {
-        field: "monthFormatted",
-        title: "Month",
-      },
-      { title: "Installation capacity (kW)", field: "size" },
-      {
-        field: "installations",
-        title: "Installations",
-      },
-    ],
   },
+});
+
+const heatmapSpec: LayerSpec<Field> = {
+  width: 1200,
+  height: 400,
+  layer: [
+    {
+      mark: {
+        type: "rect",
+        // Move marks so that the year lines pass between them not through them
+        xOffset: 5,
+        clip: true,
+      },
+      encoding: {
+        x: {
+          ...dateEncoding,
+          axis: {
+            ...dateEncoding.axis,
+            grid: true,
+            gridOpacity: {
+              condition: {
+                test: {
+                  timeUnit: "monthdate",
+                  field: "value",
+                  equal: { month: 1, date: 1 },
+                },
+                value: 1,
+              },
+              value: 0,
+            },
+            gridWidth: 1,
+            // Dashed grid so that changes in colour over year boundaries are clearer
+            gridDash: [3, 10],
+          },
+        },
+        y: capacityEncoding,
+        color: {
+          field: "installations",
+          type: "quantitative",
+          legend: {
+            title: "Monthly installations",
+            offset: -250,
+            titleFontSize: 16,
+            labelFontSize: 14,
+          },
+          scale: { scheme: "oranges", type: "log" },
+        },
+        tooltip: [
+          {
+            field: "year",
+            title: "Year",
+          },
+          {
+            field: "monthFormatted",
+            title: "Month",
+          },
+          { title: "Installation capacity (kW)", field: "size" },
+          {
+            field: "installations",
+            title: "Installations",
+          },
+        ],
+      },
+    },
+    makeHeatmapAnnotation(
+      "2017-07-01 00:00:00+10:00",
+      "14 to 25 kW",
+      "Large installations are often completed at end of year"
+    ),
+    makeHeatmapAnnotation(
+      "2015-07-01 00:00:00+10:00",
+      "4.5 to 6.5 kW",
+      "Average installation sizes steady increases"
+    ),
+  ],
 };
 
-const timeSeriesSpec: UnitSpecWithFrame<Field> = {
-  width: 1200,
-  height: 200,
-  mark: { type: "bar", color: "darkorange" },
-  encoding: {
-    x: { ...dateEncoding, axis: { ...dateEncoding.axis, title: null } },
-    y: {
-      aggregate: "sum",
-      field: "installations",
-      title: "Monthly installations",
+const timeSeriesSpec: LayerSpec<Field> = {
+  layer: [
+    {
+      width: 1200,
+      height: 200,
+      mark: { type: "bar", color: "darkorange" },
+      encoding: {
+        x: { ...dateEncoding, axis: { ...dateEncoding.axis, title: null } },
+        y: {
+          aggregate: "sum",
+          field: "installations",
+          title: "Monthly installations",
+        },
+        tooltip: [
+          {
+            field: "year",
+            title: "Year",
+          },
+          {
+            field: "monthFormatted",
+            title: "Month",
+          },
+          {
+            title: "Installations",
+            field: "installations",
+            aggregate: "sum",
+            format: ",",
+          },
+        ],
+      },
     },
-    tooltip: [
-      {
-        field: "year",
-        title: "Year",
-      },
-      {
-        field: "monthFormatted",
-        title: "Month",
-      },
-      {
-        title: "Installations",
-        field: "installations",
-        aggregate: "sum",
-        format: ",",
-      },
-    ],
-  },
+    makeTimeSeriesAnnotation("2011-07-01 00:00:00+10:00", 70000, [
+      "NSW Solar Bonus Scheme ends",
+      "5x solar multiplier ends",
+    ]),
+    makeTimeSeriesAnnotation("2012-07-01 00:00:00+10:00", 60000, [
+      "QLD Solar Bonus Scheme ends",
+      "3x solar multiplier ends",
+    ]),
+    makeTimeSeriesAnnotation(
+      "2013-01-01 00:00:00+11:00",
+      30000,
+      "2x solar multiplier ends"
+    ),
+  ],
 };
 
 const capacitySpec: UnitSpecWithFrame<Field> = {
@@ -152,27 +217,6 @@ const visSpec: VisualizationSpec = {
     {
       calculate: "monthFormat(datum.month - 1)",
       as: "monthFormatted",
-    },
-    {
-      lookup: "size",
-      from: {
-        data: {
-          values: [
-            { sizeMin: 0, sizeLabel: "Less than 2.5 kW" },
-            { sizeMin: 2.5, sizeLabel: "2.5 to 4.5 kW" },
-            { sizeMin: 4.5, sizeLabel: "4.5 to 6.5 kW" },
-            { sizeMin: 6.5, sizeLabel: "6.5 to 9.5 kW" },
-            { sizeMin: 9.5, sizeLabel: "9.5 to 14 kW" },
-            { sizeMin: 14, sizeLabel: "14 to 25 kW" },
-            { sizeMin: 25, sizeLabel: "25 to 100 kW" },
-            { sizeMin: 100, sizeLabel: "100 kW to 5 MW" },
-            { sizeMin: 5000, sizeLabel: "5 MW to 30 MW" },
-            { sizeMin: 30000, sizeLabel: "More than 30 MW" },
-          ],
-        },
-        key: "sizeLabel",
-        fields: ["sizeMin"],
-      },
     },
   ],
   spacing: 5,
