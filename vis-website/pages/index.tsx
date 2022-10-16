@@ -135,9 +135,10 @@ const Home: NextPage = () => {
           installations/smallest sample size.
         </Grid>
         <Grid item xs={12} md={4}>
-          Using the "Year" slider, we can see that barely a decade ago, the
-          average size of solar installations was notably small by today&apos;s
-          standards. The vast majority of household installations were in the{" "}
+          Using the &quot;Year&quot; slider, we can see that barely a decade
+          ago, the average size of solar installations was notably small by
+          today&apos;s standards. The vast majority of household installations
+          were in the{" "}
           <Highlight color={lightOrange}>smallest size category</Highlight>, and{" "}
           <Highlight color={darkOrange}>large-scale solar farms</Highlight>{" "}
           scarcely existed at all.
@@ -163,11 +164,11 @@ const Home: NextPage = () => {
           source's behalf, but I shall pretend I didn't notice that) */}
         </Grid>
         <Grid item xs={12} md={4}>
-          The amount of installed solar across Australia's states spans an order
-          of magnitude. At first it's easy to blame this on a lack of sunlight
-          for places like <Highlight color="#db3">Tasmania</Highlight>, but it
-          turns out for it&apos;s small population, it has a similar amount per
-          capita as other states.
+          The amount of installed solar across Australia&apos;s states spans an
+          order of magnitude. At first it&apos;s easy to blame this on a lack of
+          sunlight for places like <Highlight color="#db3">Tasmania</Highlight>,
+          but it turns out for it&apos;s small population, it has a similar
+          amount per capita as other states.
         </Grid>
         <CenterGridItem>
           <CumulativeCapacityPlot />
