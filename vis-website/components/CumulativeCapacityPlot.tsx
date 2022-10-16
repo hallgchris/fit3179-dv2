@@ -1,15 +1,15 @@
 import { VegaLite, VisualizationSpec } from "react-vega";
-import { title } from "vega-lite/build/src/channeldef";
 import { dateEncoding, stateLabelLookup } from "./common";
 
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Total Australian installed solar capacity",
-    fontSize: 24,
+    text: "Australian total installed solar capacity",
+    subtitle: "Nationally 2001-present, by state 2007-present",
+    fontSize: 16,
   },
-  width: 1200,
-  height: 600,
+  width: 900,
+  height: 400,
   data: { url: "state_time_series_nosizes.csv" },
   transform: [
     { filter: "datum.capacity > 0" },
@@ -31,6 +31,10 @@ const visSpec: VisualizationSpec = {
       ],
       groupby: ["state"],
     },
+    {
+      calculate: "datum.cumulativeCapacity * 1000",
+      as: "cumulativeCapacityW",
+    },
     stateLabelLookup,
   ],
   mark: {
@@ -41,9 +45,10 @@ const visSpec: VisualizationSpec = {
   encoding: {
     x: dateEncoding,
     y: {
-      field: "cumulativeCapacity",
+      field: "cumulativeCapacityW",
       type: "quantitative",
-      scale: { type: "log", domain: [100, 1e8] },
+      scale: { type: "log", domain: [1e5, 1e11] },
+      axis: { values: [1e5, 1e6, 1e7, 1e8, 1e9, 1e10, 1e11], format: "s" },
       title: "Total installed capacity (kW)",
     },
     color: {

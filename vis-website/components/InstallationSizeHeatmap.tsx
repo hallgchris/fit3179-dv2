@@ -4,9 +4,9 @@ import { LayerSpec } from "vega-lite/build/src/spec";
 import { UnitSpec, UnitSpecWithFrame } from "vega-lite/build/src/spec/unit";
 import { dateEncoding, makeTimeSeriesAnnotation } from "./common";
 
-const capacityEncoding: PositionFieldDef<"size"> = {
+const sizeEncoding: PositionFieldDef<"size"> = {
   field: "size",
-  title: "Installation capacity (kW)",
+  title: "Installation capacity",
   type: "ordinal",
   sort: [
     "Less than 2.5 kW",
@@ -46,7 +46,7 @@ const makeHeatmapAnnotation = (
 });
 
 const heatmapSpec: LayerSpec<Field> = {
-  width: 1200,
+  width: 900,
   height: 400,
   layer: [
     {
@@ -78,15 +78,13 @@ const heatmapSpec: LayerSpec<Field> = {
             gridDash: [3, 10],
           },
         },
-        y: capacityEncoding,
+        y: sizeEncoding,
         color: {
           field: "installations",
           type: "quantitative",
           legend: {
             title: "Monthly installations",
-            offset: -250,
-            titleFontSize: 16,
-            labelFontSize: 14,
+            offset: -190,
           },
           scale: { scheme: "oranges", type: "log" },
         },
@@ -99,7 +97,7 @@ const heatmapSpec: LayerSpec<Field> = {
             field: "monthFormatted",
             title: "Month",
           },
-          { title: "Installation capacity (kW)", field: "size" },
+          { title: "Installation size", field: "size" },
           {
             field: "installations",
             title: "Installations",
@@ -108,7 +106,7 @@ const heatmapSpec: LayerSpec<Field> = {
       },
     },
     makeHeatmapAnnotation(
-      "2017-07-01 00:00:00+10:00",
+      "2016-07-01 00:00:00+10:00",
       "14 to 25 kW",
       "Large installations are often completed at end of year"
     ),
@@ -123,7 +121,7 @@ const heatmapSpec: LayerSpec<Field> = {
 const timeSeriesSpec: LayerSpec<Field> = {
   layer: [
     {
-      width: 1200,
+      width: 900,
       height: 200,
       mark: { type: "bar", color: "darkorange" },
       encoding: {
@@ -167,8 +165,8 @@ const timeSeriesSpec: LayerSpec<Field> = {
   ],
 };
 
-const capacitySpec: UnitSpecWithFrame<Field> = {
-  width: 200,
+const sizeSpec: UnitSpecWithFrame<Field> = {
+  width: 100,
   height: 400,
   mark: { type: "bar", color: "darkorange" },
   encoding: {
@@ -178,7 +176,7 @@ const capacitySpec: UnitSpecWithFrame<Field> = {
       title: "Total installations",
     },
     y: {
-      ...capacityEncoding,
+      ...sizeEncoding,
       axis: {
         orient: "right",
         title: null,
@@ -188,7 +186,7 @@ const capacitySpec: UnitSpecWithFrame<Field> = {
       },
     },
     tooltip: [
-      { title: "Installation capacity (kW)", field: "size" },
+      { title: "Installation size", field: "size" },
       {
         title: "Installations",
         field: "installations",
@@ -202,8 +200,9 @@ const capacitySpec: UnitSpecWithFrame<Field> = {
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Solar installation breakdown by capacity over time",
-    fontSize: 24,
+    text: "Quantity and size of Australian solar installations",
+    subtitle: "Monthly 2010/01-2022/06, installations smaller than 100 kW",
+    fontSize: 16,
   },
   data: { url: "installations_time_series.csv" },
   transform: [
@@ -224,7 +223,7 @@ const visSpec: VisualizationSpec = {
     timeSeriesSpec,
     {
       spacing: 0,
-      hconcat: [heatmapSpec, capacitySpec],
+      hconcat: [heatmapSpec, sizeSpec],
     },
   ],
 };

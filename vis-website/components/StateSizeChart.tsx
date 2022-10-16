@@ -4,10 +4,10 @@ import { sizeLabels, sizeLabelLookup, stateLabelLookup } from "./common";
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
-    text: "Total Australian installed solar capacity",
-    fontSize: 24,
+    text: "Solar plant sizes by Australian state",
+    fontSize: 16,
   },
-  width: 1200,
+  width: 900,
   height: 400,
   data: { url: "state_time_series.csv" },
   params: [
@@ -15,7 +15,7 @@ const visSpec: VisualizationSpec = {
       name: "time_slider",
       value: 2022,
       bind: {
-        name: "Date",
+        name: "Year: ",
         input: "range",
         min: 2010,
         max: 2022,

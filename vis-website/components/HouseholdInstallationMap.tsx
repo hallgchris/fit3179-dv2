@@ -7,25 +7,25 @@ interface StateLocation {
 }
 
 const stateLocations: StateLocation[] = [
-  { name: "Australia", loc: [134, -28], scale: 1200 },
-  { name: "New South Wales", loc: [147, -33], scale: 4500 },
-  { name: "Northern Territory", loc: [133, -19], scale: 3000 },
-  { name: "Queensland", loc: [144, -20], scale: 2400 },
-  { name: "South Australia", loc: [136, -32.5], scale: 3000 },
-  { name: "Tasmania", loc: [146, -41.5], scale: 7000 },
-  { name: "Victoria", loc: [145, -36.5], scale: 6700 },
-  { name: "Western Australia", loc: [121, -25], scale: 2000 },
+  { name: "Australia", loc: [134, -28], scale: 1000 },
+  { name: "New South Wales", loc: [147, -33], scale: 3500 },
+  { name: "Northern Territory", loc: [133, -18.5], scale: 2400 },
+  { name: "Queensland", loc: [144, -20], scale: 1900 },
+  { name: "South Australia", loc: [136, -32], scale: 2600 },
+  { name: "Tasmania", loc: [146, -41.5], scale: 6000 },
+  { name: "Victoria", loc: [145.5, -36.6], scale: 6000 },
+  { name: "Western Australia", loc: [121, -25], scale: 1600 },
 ];
 
 const visSpec: VisualizationSpec = {
   $schema: "https://vega.github.io/schema/vega-lite/v5.json",
   title: {
     text: "Household solar installations in Australia",
-    fontSize: 24,
+    fontSize: 16,
     subtitle: "30 June 2022, by LGA",
   },
-  width: 1200,
-  height: 900,
+  width: 1000,
+  height: 700,
   params: [
     {
       name: "center",
@@ -88,11 +88,14 @@ const visSpec: VisualizationSpec = {
           legend: {
             title: "% of dwellings with solar",
             titleLimit: 200,
-            // orient: "top-right",
+            orient: "bottom-left",
             direction: "horizontal",
             format: ".0%",
             titleFontSize: 16,
             labelFontSize: 14,
+            fillColor: "rgba(255, 255, 255, 0.5)",
+            padding: 10,
+            cornerRadius: 10,
           },
         },
       },
