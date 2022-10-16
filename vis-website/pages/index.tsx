@@ -57,22 +57,28 @@ const Home: NextPage = () => {
           <h2>The size of solar installations has increased over time</h2>
         </Grid>
         <Grid item xs={12} md={4}>
-          More and more houses in Australia are choosing to install solar
-          panels. However, we&apos;re not close to reaching the peak rates of
+          <b>
+            More and more houses in Australia are choosing to install solar
+            panels.
+          </b>{" "}
+          However, we&apos;re not close to reaching the peak rates of
           installations seen in 2011/2012.
           <br />
           <br />
           During this time, many states offered generous incentives for
           households to install solar panels, including the Solar Bonus Schemes,
-          solar multipliers and feed-in tariffs. Curiously, it seems the
-          greatest incentives were the ending of these programs - unrivalled
-          quantities of households purchased solar as these ended in order to
-          lock-in these benefits.
+          solar multipliers and feed-in tariffs. Curiously, it seems{" "}
+          <b>the greatest incentives were the ending of these programs</b> -
+          unrivalled quantities of households purchased solar as these ended in
+          order to lock-in these benefits.
         </Grid>
         <Grid item xs={12} md={4}>
-          The average size of solar installations has been steadily increasing
-          over the last decade, likely due to improvements in solar panel
-          technology and its falling cost.
+          <b>
+            The average size of solar installations has been steadily increasing
+            over the last decade
+          </b>
+          , likely due to improvements in solar panel technology and its falling
+          cost.
           <br />
           <br />
           An interesting observation is that the larger of the small scale solar
@@ -102,7 +108,7 @@ const Home: NextPage = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           Majority of states have their solar generation capacity come primarily
-          from two sources:{" "}
+          from <b>two sources</b>:{" "}
           <Highlight color={lightOrange}>
             Household-scale solar (4.5 to 9.5 kW)
           </Highlight>{" "}
@@ -124,8 +130,8 @@ const Home: NextPage = () => {
           enclosed.
           <br />
           <br />
-          Perhaps unsurprisingly, the states with the most untypical
-          distribution of installation sizes are also those with the least
+          Perhaps unsurprisingly, the states with the most atypical distribution
+          of installation sizes are also those with the least
           installations/smallest sample size.
         </Grid>
         <Grid item xs={12} md={4}>
@@ -145,8 +151,8 @@ const Home: NextPage = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           The amount of solar power available in{" "}
-          <Highlight color="#3c6888">Australia</Highlight> has been growing
-          exponentially since the first panels appeared two decades ago.
+          <Highlight color="#3c6888">Australia</Highlight> has been growing{" "}
+          <b>exponentially</b> since the first panels appeared two decades ago.
         </Grid>
         <Grid item xs={12} md={4}>
           Most notable is a large jump in 2006, due to the opening of Emu Downs
